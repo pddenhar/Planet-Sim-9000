@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://da7k2y0xnjhvr"]
+
+[ext_resource type="Script" path="res://Logic/planets.cs" id="1_ejer7"]
+[ext_resource type="Script" path="res://Logic/Moon.cs" id="1_vj25m"]
+
+[node name="planets" type="Node2D"]
+script = ExtResource("1_ejer7")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -200.0
+offset_right = 320.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.141176, 0.152941, 0.164706, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Planet" type="Polygon2D" parent="."]
+position = Vector2(5, 1)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Mass = 1500.0
+
+[node name="Moon" type="Polygon2D" parent="."]
+position = Vector2(-93, 50)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Speed = Vector2(30, 10)
+Mass = 20.0
+
+[node name="Moon2" type="Polygon2D" parent="."]
+position = Vector2(-89, -61)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Speed = Vector2(-10, 30)
+Mass = 20.0
+
+[node name="Moon3" type="Polygon2D" parent="."]
+position = Vector2(62, -81)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Speed = Vector2(-10, -5)
+Mass = 30.0
+
+[node name="Moon4" type="Polygon2D" parent="."]
+position = Vector2(194, 72)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Speed = Vector2(-5, 5)
+Mass = 30.0
+
+[node name="Moon5" type="Polygon2D" parent="."]
+position = Vector2(20, 141)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)
+script = ExtResource("1_vj25m")
+Speed = Vector2(-10, 0)
+Mass = 20.0
