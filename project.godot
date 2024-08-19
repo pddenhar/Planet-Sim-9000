@@ -13,13 +13,13 @@ config_version=5
 config/name="Planet Sim 9000"
 config/description="Watch the planets swirl."
 config/tags=PackedStringArray("2d", "demo", "official")
-run/main_scene="res://planets.tscn"
+run/main_scene="res://SinglePlanet.tscn"
 config/features=PackedStringArray("4.2", "C#")
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=400
+window/size/viewport_width=800
+window/size/viewport_height=640
 window/stretch/scale_mode="integer"
 
 [dotnet]

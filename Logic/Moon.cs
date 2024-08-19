@@ -1,12 +1,11 @@
 using Godot;
-using System;
-using pddenhar.Planets.Logic;
+
+namespace pddenhar.Planets.Logic;
 
 public partial class Moon : DraggablePolygon
 {
 	private Vector2 _initialPos;
 	// speed unit m/s 
-	[Export]
 	public Vector2 Speed { get; set; } = new Vector2(0, 0);
 	// mass unit kg
 	[Export]
@@ -18,7 +17,8 @@ public partial class Moon : DraggablePolygon
 	// Damping constant for dragging
 	private float _c;
 
-	private DebugVector _forceVector;
+	private DebugVector _forceVector = new DebugVector();
+	private DebugVector _speedVector = new DebugVector();
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,8 +26,10 @@ public partial class Moon : DraggablePolygon
 		_k = Mass / 2;
 		_c = Mass / 20;
 		_initialPos = Position;
-		_forceVector = new DebugVector();
+
 		AddChild(_forceVector);
+		_speedVector.DrawColor = Colors.Red;
+		AddChild(_speedVector);
 	}
 
 	// Called at 60hz
@@ -40,25 +42,26 @@ public partial class Moon : DraggablePolygon
 		Speed += acceleration * (float)delta;
 		Position += Speed * (float)delta;
 		
-		_forceVector.DrawVector = Force;
+		_forceVector.DrawVector = Force/1000;
+		_speedVector.DrawVector = Speed;
 		
 		// Return force to zero now that it has been consumed for this delta
 		Force = Vector2.Zero;
 	}
 	
-	protected Vector2 HandleDrag()
+	private Vector2 HandleDrag()
 	{
 		if (IsDragging)
 		{
-			Vector2 TargetPosition = GetGlobalMousePosition() - _dragOffset;
-			Vector2 PositionDelta = TargetPosition - GlobalPosition;
+			Vector2 targetPosition = GetGlobalMousePosition() - DragOffset;
+			Vector2 positionDelta = targetPosition - GlobalPosition;
 
-			Vector2 SpringForce = PositionDelta * _k;
+			Vector2 springForce = positionDelta * _k;
 
-			float RelativeSpeed = PositionDelta.Normalized().Dot(Speed);
-			Vector2 DamperForce = _k * RelativeSpeed * PositionDelta.Normalized();
-			GD.Print($"Damper Force: {DamperForce} Spring Force: {SpringForce}");
-			return SpringForce - DamperForce;
+			float relativeSpeed = positionDelta.Normalized().Dot(Speed);
+			Vector2 damperForce = _k * relativeSpeed * positionDelta.Normalized();
+			//GD.Print($"Damper Force: {DamperForce} Spring Force: {SpringForce}");
+			return springForce - damperForce;
 		}
 
 		return Vector2.Zero;

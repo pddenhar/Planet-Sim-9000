@@ -1,33 +1,29 @@
 ﻿using Godot;
-using System;
 
 namespace pddenhar.Planets.Logic;
 
 public partial class DraggablePolygon : Polygon2D
 {
-    protected bool IsDragging = false;
-    protected Vector2 _dragOffset;
+    protected bool IsDragging;
+    protected Vector2 DragOffset;
 
     public override void _Input(InputEvent @event)
     {
         // Check for a mouse button press
-        if (@event is InputEventMouseButton mouseButtonEvent)
+        if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left } mouseButtonEvent)
         {
-            if (mouseButtonEvent.ButtonIndex == MouseButton.Left)
+            if (mouseButtonEvent.Pressed && IsMouseOver())
             {
-                if (mouseButtonEvent.Pressed && IsMouseOver())
-                {
-                    // Start dragging
-                    IsDragging = true;
-                    // Calculate the offset between the mouse and the polygon's position
-                    _dragOffset = GetGlobalMousePosition() - GlobalPosition;
-                    GD.Print($"Dragging {Name}. Drag offset: {_dragOffset}");
-                }
-                else
-                {
-                    // Stop dragging when the mouse button is released
-                    IsDragging = false;
-                }
+                // Start dragging
+                IsDragging = true;
+                // Calculate the offset between the mouse and the polygon's position
+                DragOffset = GetGlobalMousePosition() - GlobalPosition;
+                GD.Print($"Dragging {Name}. Drag offset: {DragOffset}");
+            }
+            else
+            {
+                // Stop dragging when the mouse button is released
+                IsDragging = false;
             }
         }
     }
