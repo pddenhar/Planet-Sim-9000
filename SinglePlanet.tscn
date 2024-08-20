@@ -17,6 +17,10 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Add Moon"
 
+[node name="PhysicsTimeLabel" type="Label" parent="CanvasLayer/ButtonContainer"]
+layout_mode = 2
+text = "10ms"
+
 [node name="Planet" type="Polygon2D" parent="."]
 position = Vector2(459, 247)
 polygon = PackedVector2Array(20, 0, 17, -20, -1, -24, -28, -9, -25, 20, -6, 21, 16, 18)

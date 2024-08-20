@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 namespace pddenhar.Planets.Logic;
@@ -14,6 +15,11 @@ public partial class SpaceField : Node2D
 
 	private const float MaxMass = 10000f;
 	
+	private const int StartingPlanets = 100;
+
+	private float _lastPhysicsTime = 0;
+	private Label _physicsTimeLabel;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -23,6 +29,8 @@ public partial class SpaceField : Node2D
 		Button addPlanetButton = GetNode<Button>("CanvasLayer/ButtonContainer/AddPlanetButton");
 		// New idiomatic way of connecting to signals in Godot
 		addPlanetButton.ButtonUp += OnAddPlanetButtonPressed;
+		
+		_physicsTimeLabel = GetNode<Label>("CanvasLayer/ButtonContainer/PhysicsTimeLabel");
 
 		// Get all the child nodes and check if they are of type Moon
 		foreach (Node child in GetChildren())
@@ -36,7 +44,7 @@ public partial class SpaceField : Node2D
 		// Now you can use the moons list for further logic
 		GD.Print($"Found {_moons.Count} moons.");
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < StartingPlanets; i++)
 		{
 			AddRandomPlanet();
 		}
@@ -62,7 +70,7 @@ public partial class SpaceField : Node2D
 		GD.Print($"Main planet is at position: {centralPlanet.GlobalPosition}. Creating moon at position: {newPosition}");
 		Moon newMoon = (Moon)centralPlanet.Duplicate();
 		newMoon.GlobalPosition = newPosition;
-		newMoon.Scale = new Vector2(sizePct, sizePct);
+		newMoon.Scale = new Vector2(sizePct/10, sizePct/10);
 		newMoon.Mass = newMass;
 		newMoon.Speed = targetVelocity*Vector2.FromAngle(theta+Mathf.Pi/2);
 		_moons.Add(newMoon);
@@ -79,7 +87,21 @@ public partial class SpaceField : Node2D
 		return originalPosition + new Vector2(offsetX, offsetY);
 	}
 
+	public override void _Process(double delta)
+	{
+		_physicsTimeLabel.Text = $"{_lastPhysicsTime} ms";
+	}
+
 	public override void _PhysicsProcess(double delta)
+	{
+		Stopwatch stopwatch = Stopwatch.StartNew();
+		_DoNBody();
+		stopwatch.Stop();
+		//GD.Print($"DoNBody executed in {stopwatch.ElapsedMilliseconds} ms");
+		_lastPhysicsTime = stopwatch.ElapsedMilliseconds;
+	}
+
+	private void _DoNBody()
 	{
 		// Update the speed of each moon based on gravity
 		for (int i = 0; i < _moons.Count; i++)
@@ -100,7 +122,7 @@ public partial class SpaceField : Node2D
 				// Ensure the distance isn't too small to avoid extreme forces
 				if (distanceSquared < 100.0f)
 				{
-					GD.Print($"Distance between {moon.Name} and {otherMoon.Name} too small. Skipping.");
+					//GD.Print($"Distance between {moon.Name} and {otherMoon.Name} too small. Skipping.");
 					break;
 				}
 
