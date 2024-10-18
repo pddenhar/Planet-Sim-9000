@@ -5,3 +5,10 @@ This is a toy game built in Godot to experiment with optimizations to n-body sim
 
 `Logic/Moon.cs` is the actual Node2D object representing a body in space. Each Moon double integrates the force acting on it 
 each time a physics frame is calculated to obtain a new position.
+
+References:
+===========
+  * https://docs.taichi-lang.org/docs/sparse
+  * https://en.wikipedia.org/wiki/Quadtree
+  * https://badecho.com/index.php/2023/01/14/fast-simple-quadtree/
+  * https://github.com/BadEcho/core/blob/master/src/Game/Quadtree.cs
